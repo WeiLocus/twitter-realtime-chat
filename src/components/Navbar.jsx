@@ -12,6 +12,8 @@ import { ReactComponent as SettingIcon } from '../assets/Setting.svg';
 import { ReactComponent as SettingBlackIcon } from '../assets/Setting-black.svg';
 import { ReactComponent as LogoutIcon } from '../assets/Logout.svg';
 import { ReactComponent as MobileTweetIcon } from '../assets/Mobile-Tweet.svg';
+import { ReactComponent as NotificationNavbarIcon } from '../assets/Notification-navbar.svg';
+import { ReactComponent as NotificationNavbarBlackIcon } from '../assets/Notification-navbar-black.svg';
 
 const StyledNav = styled.nav`
   width: 100%;
@@ -196,6 +198,18 @@ export function Navbar({ tweetInput, currentUser, onChange, onAddTweet }) {
                   )}
                 </div>
                 <span>首頁</span>
+              </StyledLi>
+            </NavLink>
+            <NavLink to="/notification">
+              <StyledLi>
+                <div className="icon">
+                  {pathname.includes('/notification') ? (
+                    <NotificationNavbarBlackIcon />
+                  ) : (
+                    <NotificationNavbarIcon />
+                  )}
+                </div>
+                <span>通知</span>
               </StyledLi>
             </NavLink>
             <NavLink
