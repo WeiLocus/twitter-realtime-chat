@@ -128,7 +128,7 @@ const StyledDiv = styled.div`
   }
 `;
 
-// const socket = io.connect('https://murmuring-plains-40389.herokuapp.com/');
+const socket = io.connect('https://murmuring-plains-40389.herokuapp.com/');
 
 export default function ChatRoom() {
   const { currentUser } = useUser();
@@ -144,20 +144,20 @@ export default function ChatRoom() {
           Date.now()
         ).getMinutes()}`,
       };
-      // send messsageDate to back-end
-      // await socket.emit('send_message', messageData);
-      // setMessageList((list) => [...list, messageData]);
-      // setCurrentMessage('');
+      // send messageDate to back-end
+      await socket.emit('send_message', messageData);
+      setMessageList((list) => [...list, messageData]);
+      setCurrentMessage('');
     }
   };
-  // useEffect(() => {
-  //   console.log(`${currentUser.name} joined the chat`);
-  //   socket.on('receive_message', (data) => {
-  //     console.log(data);
-  //     setMessageList((list) => [...list, data]);
-  //     console.log('message received!');
-  //   });
-  // }, []);
+  useEffect(() => {
+    console.log(`${currentUser.name} joined the chat`);
+    socket.on('receive_message', (data) => {
+      console.log(data);
+      setMessageList((list) => [...list, data]);
+      console.log('message received!');
+    });
+  }, []);
 
   return (
     <>
