@@ -1,9 +1,89 @@
 /* eslint-disable react/button-has-type */
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import { Header } from '.';
 import { ReactComponent as SendMessage } from '../assets/SendMessage.svg';
 import { useUser } from '../contexts/UserContext';
+
+const StyledMessage = styled.div`
+  padding: 10px;
+  display: flex;
+
+  img {
+    width: 45px;
+    height: 45px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+  }
+
+  .message-content {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    width: fit-content;
+    max-width: 20ch;
+    margin-inline: 5px;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-gray-200);
+    border-radius: 30px 30px 30px 0px;
+    overflow-warp: break-word;
+  }
+
+  .message-meta {
+    justify-content: flex-end;
+    margin-top: 2px;
+    margin-left: 5px;
+    color: var(--color-gray-700);
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+
+  &.self {
+    justify-content: end;
+
+    img {
+      display: none;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+    }
+    .message-content {
+      border-radius: 30px 30px 0 30px;
+      background-color: var(--color-theme);
+      color: white;
+    }
+
+    .message-meta {
+      margin-right: 5px;
+    }
+  }
+`;
+
+function ChatMessage({ message }) {
+  const { currentUser } = useUser();
+
+  return (
+    <StyledMessage className={message.author.id === currentUser.id && 'self'}>
+      <img src={message.author.avatar} alt="avatar" />
+      <div>
+        <div className="message-content">
+          <p>{message.message}</p>
+        </div>
+        <div className="message-meta">
+          <p id="time">{message.time}</p>
+        </div>
+      </div>
+    </StyledMessage>
+  );
+}
+
+function UserNotification({ user, action }) {
+  return <div>User A joined the chat</div>;
+}
 
 const StyledDiv = styled.div`
   height: calc(100vh - 68px);
@@ -18,49 +98,6 @@ const StyledDiv = styled.div`
       height: 100%;
       overflow-y: scroll;
       overflow-x: hidden;
-    }
-
-    .message {
-      display: flex;
-      background-color: pink;
-      padding: 10px;
-
-      .avatar {
-        min-width: 60px;
-
-        img {
-          width: 50px;
-          height: 50px;
-          aspect-ratio: 1/1;
-          margin-right: 0.5rem;
-          border-radius: 50%;
-          overflow: hidden;
-        }
-      }
-
-      .message-content {
-        display: flex;
-        align-items: center;
-        min-height: 40px;
-        margin-right: 5px;
-        margin-left: 5px;
-        padding-right: 1rem;
-        padding-left: 1rem;
-        background-color: var(--color-gray-200);
-        border-radius: 25px 25px 25px 0px;
-        //自動換行
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-      }
-
-      .message-meta {
-        justify-content: flex-end;
-        margin-top: 2px;
-        margin-left: 5px;
-        color: var(--color-gray-700);
-        font-weight: 400;
-        font-size: 0.8rem;
-      }
     }
   }
 
@@ -91,17 +128,17 @@ const StyledDiv = styled.div`
   }
 `;
 
+// const socket = io.connect('https://murmuring-plains-40389.herokuapp.com/');
 
-export default function ChatRecord() {
+export default function ChatRoom() {
   const { currentUser } = useUser();
-  const { name, avatar } = currentUser;
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
   const handleSendMessage = async () => {
     if (currentMessage !== '') {
       const messageData = {
-        sender: name,
+        author: currentUser,
         message: currentMessage,
         time: `${new Date(Date.now()).getHours()}:${new Date(
           Date.now()
@@ -109,41 +146,30 @@ export default function ChatRecord() {
       };
       // send messageDate to back-end
       // await socket.emit('send_message', messageData);
+      // setMessageList((list) => [...list, messageData]);
+      // setCurrentMessage('');
     }
   };
   // useEffect(() => {
+  //   console.log(`${currentUser.name} joined the chat`);
   //   socket.on('receive_message', (data) => {
+  //     console.log(data);
   //     setMessageList((list) => [...list, data]);
-  //     setCurrentMessage('');
+  //     console.log('message received!');
   //   });
   // }, []);
+
   return (
     <>
       <Header headerText="公開聊天室" />
       <StyledDiv>
         <div className="chat-window">
           <div className="chat-body">
-            {messageList.map((messageContent, index) => {
-              return (
-                <div
-                  className="message"
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                >
-                  <div className="avatar">
-                    <img src={avatar} alt="avatar" />
-                  </div>
-                  <div>
-                    <div className="message-content">
-                      <p>{messageContent.message}</p>
-                    </div>
-                    <div className="message-meta">
-                      <p id="time">{messageContent.time}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            <ScrollToBottom className="message-container">
+              {messageList.map((message, index) => {
+                return <ChatMessage message={message} key={index} />;
+              })}
+            </ScrollToBottom>
           </div>
           <div className="chat-footer">
             <input
