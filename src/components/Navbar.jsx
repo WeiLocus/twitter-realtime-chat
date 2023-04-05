@@ -214,10 +214,10 @@ export function Navbar({ tweetInput, currentUser, onChange, onAddTweet }) {
                 <span>通知</span>
               </StyledLi>
             </NavLink>
-            <NavLink to="/public">
+            <NavLink to="/public-messages">
               <StyledLi>
                 <div className="icon">
-                  {pathname.includes('/public') ? (
+                  {pathname.includes('/public-messages') ? (
                     <ChatRoomOrangeIcon />
                   ) : (
                     <ChatRoomIcon />
