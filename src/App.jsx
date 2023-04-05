@@ -10,6 +10,8 @@ import {
   SignupPage,
   TweetPage,
   UserPage,
+  NotificationPage,
+  PublicChatPage,
 } from './pages';
 import {
   AdminLayout,
@@ -45,6 +47,8 @@ function App() {
               <Route index element={<TweetPage />} />
               <Route path=":id" element={<ReplyPage />} />
             </Route>
+            <Route path="notification" element={<NotificationPage />} />
+            <Route path="public" element={<PublicChatPage />} />
             <Route element={<UserPage />}>
               <Route path="users/:id">
                 <Route path="tweets" element={<UserTweetList />} />
