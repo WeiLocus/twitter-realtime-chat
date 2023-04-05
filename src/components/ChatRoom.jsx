@@ -1,5 +1,6 @@
 /* eslint-disable react/button-has-type */
 import styled from 'styled-components';
+import io from 'socket.io-client';
 import { useState, useEffect } from 'react';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { Header } from '.';
@@ -87,7 +88,6 @@ function UserNotification({ user, action }) {
 
 const StyledDiv = styled.div`
   height: calc(100vh - 68px);
-  width: 100%;
 
   .chat-body {
     height: calc(100vh - (68px + 64px));
@@ -144,7 +144,7 @@ export default function ChatRoom() {
           Date.now()
         ).getMinutes()}`,
       };
-      // send messageDate to back-end
+      // send messsageDate to back-end
       // await socket.emit('send_message', messageData);
       // setMessageList((list) => [...list, messageData]);
       // setCurrentMessage('');
