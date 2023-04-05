@@ -20,9 +20,17 @@ const StyledList = styled.div`
 const StyledListItem = styled.li`
   display: grid;
   grid-template-columns: calc(50px + 0.5rem) 1fr;
+  align-items: center;
   width: 100%;
   padding: 1rem;
   border-bottom: 1px solid var(--color-gray-200);
+
+  img {
+    width: 45px;
+    height: 45px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+  }
 `;
 
 export default function PublicChatPage() {
